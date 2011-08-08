@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<link href="carsquash.css" media="screen" rel="stylesheet" type="text/css"/>
+<title>Car Squash</title>
+</head>
+<body>
+<!-- 
+Car Squash: a small game in Canvas (alpha)
+
+Contact: @loleg http://oleg.utou.ch
+
+Creative Commons Attribution 3.0 Unported License
+http://creativecommons.org/licenses/by/3.0/
+-->
+<center><h1>Car Squash</h1><h2>A tiny remedy for traffic angst</h2></center>
+<center><canvas></canvas></center>
+<script>
+    var c = document.getElementsByTagName('canvas')[0];
+    var b = document.body;
+    var a = c.getContext('2d');
+    var screen_width  = c.width  = 300;
+    var screen_height = c.height = 400;
+    var number_cars = 6;
+    var hammer_size = 60;
+</script>
+<center>
+<small>Tap/click and hold to squash as many as you can!</small><br />
+    <button onclick="history.go(0)">Reset</button>
+    <button onclick="document.location.href='http://oleg.utou.ch'">Feedback</button>
+    <p style="width:36em;margin-top:1em;">Car Squash is for those of us who like to go hiking in the countryside, but have the nature experience spoiled by the noise & fugliness of motorways. Disclaimer: I drive just like the rest of us, and this game is not intended to incite any form of violence towards cars and drivers. The idea is to add cyclists or cute animals for which you would lose points, and perhaps 'shoo' the cars away instead of squashing them in future versions.</p>
+</center>
+<script src="carsquash.js" type="text/javascript"></script>
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+<head>
+<title>More Cowbell</title>
+
+		<script type="text/javascript" src="lib/Three.js"></script>
+
+		<script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="js/Stats.js"></script>
+		<script type="text/javascript" src="js/Detector.js"></script>
+
+</head>
+<body>
+<!-- 
+More Cowbell: a little game made in honour of the Hacker Dojo, Mt. View
+THREE.js by mrdoob is used for WebGL graphics
+
+Contact: @loleg http://oleg.utou.ch
+
+Creative Commons Attribution 3.0 Unported License
+http://creativecommons.org/licenses/by/3.0/
+-->
+<script>
+
+//if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+var container, stats;
+var camera, scene, projector, renderer;
+var particleMaterial;
+
+var hammer, road;
+var cowbells = new Array();
+var number_cowbells = 5;
+var score = 0;
+
+var divScore, divDialog;
+var gameStarted = false;
+
+var cowbell;
+
+init();
+animate();
+
+gameDialog('The clock is ticking.<br>I want to hear more cowbell!');
+
+function gameStart() {
+	resetGameObjects();
+	setTimeout("gameOver()", 10000);
+	gameStarted = true;
+}
+
+function gameOver() {
+	var result = (score > 50) ? "Epic cowbell" : 
+							 (score > 20) ? "Good work with that cowbell" :
+							 (score > 15) ? "OK, that's more like it" :
+							 (score > 10) ? "Nice. Try exploring the space some more with that cowbell" :
+							 (score > 5) ? "Not bad. But I need to hear MORE COWBELL!" :
+						   (score > 0) ? "Yeah, nice try. MORE COWBELL!!" : "Click on the blocks next time";
+	gameDialog(result + " (" + score + ")");
+  score = 0; divScore.innerHTML = "";
+	gameStarted = false;
+}
+
+function gameDialog(msg) {
+	divDialog.innerHTML = msg + '<small><br><br>-<i>Bruce</i> <img src="christopher_walken.jpg"></small>';
+	divDialog.style.display = "block";
+}
+
+function init() {
+
+	container = document.createElement( 'div' );
+	container.id = 'gameContainer';
+	document.body.appendChild( container );
+
+	divDialog = document.createElement( 'div' );
+	divDialog.id = 'gameDialog';
+	divDialog.addEventListener( 'click', function() { divDialog.style.display = 'none'; gameStart(); }, false );
+	document.body.appendChild( divDialog );
+
+	divScore = document.createElement( 'div' );
+	divScore.id = 'gameScore';
+	document.body.appendChild( divScore );
+
+	camera = new THREE.Camera(60, window.innerWidth / window.innerHeight, 1, 10000 );
+	camera.position.y = -300;
+	camera.position.z = 300;
+
+	scene = new THREE.Scene();
+
+	var thecube = new THREE.Cube( 100, 100, 100 );
+  var thecyli = new THREE.Cylinder( 12, 40, 40, 150, 40, 40 );
+	var theplan = new THREE.Rectangle();
+	theplan.set ( 0, 0, 100, 100 );
+
+	// more cowbell
+	cowbell = document.createElement('audio');
+	cowbell.setAttribute('src', 'CowBell.wav');
+	cowbell.load();
+
+		// create the exterminator
+		hammer = new THREE.Mesh( thecyli, 
+			 [ new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, opacity: 0.4 } ) ] );
+		scene.addObject( hammer );
+
+		// create the road
+/*		road = new THREE.Mesh( theplan, 
+			 [ new THREE.MeshBasicMaterial( { color: 0x999999, opacity: 1.0 } ) ] );
+		scene.addObject( road );
+*/
+		// create a bucket load of cowbells
+		for (var i = 0; i < number_cowbells; i++) {
+			// TODO: cowbell, not cube you lazy coder
+			var object = cowbells[i] = new THREE.Mesh( thecube, [ new THREE.MeshBasicMaterial( { color: 0xcccccc } ) ] );
+							object.position.x = 400;
+							object.position.y = 0;
+							object.position.z = 0;
+							object.scale.x = 1;
+							object.scale.y = 1;
+							object.scale.z = 1;
+							object.rotation.x = 0;
+							object.rotation.y = 0;
+							object.rotation.z = 0;
+
+				shuffleGameObject(object);
+
+				// pick next vertical lane color
+				object.position.y = i*(8 + 100) - 100;
+		//    cc.Color = i + 1;
+				//fx(car.Color,5,15)
+
+				scene.addObject( object );
+
+		}
+
+
+		projector = new THREE.Projector();
+
+				renderer = new THREE.CanvasRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+
+document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+
+}
+
+function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			function onDocumentMouseDown( event ) {
+
+if (!gameStarted) return; 
+
+				event.preventDefault();
+
+				var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+				projector.unprojectVector( vector, camera );
+
+				var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
+
+				var intersects = ray.intersectScene( scene );
+
+				if ( intersects.length > 0 ) {
+
+					shuffleGameObject(intersects[ 0 ].object);
+
+					hammer.position.x = intersects[ 0 ].point.x;					
+					hammer.position.y = intersects[ 0 ].point.y;
+					hammer.position.z = 200;
+					hammer.visible = true;
+
+					score++; //Math.abs(intersects[ 0 ].object.Speed * 5);
+					divScore.innerHTML = "]] " + (score * 100) + " [[";
+
+					cowbell.currentTime=0;
+					cowbell.play();
+
+				}
+
+		}
+
+
+function resetGameObjects() {
+	for (var i = 0; i < number_cowbells; i++) {
+		shuffleGameObject(cowbells[i]);
+	}
+}
+
+function shuffleGameObject(object) {
+// randomize starting position and speed
+//				object.position.x = Math.random()*(800 - 400);
+				object.Speed = Math.floor(Math.random()*7) + 1;
+				object.Speed *= (Math.random()*2 >= 1) ? -1 : 1;
+				object.materials[ 0 ].color.setHex( Math.random() * 0xffffff );
+				object.position.x = -1000;
+}
+
+
+			function render() {
+
+if (!gameStarted) return; 
+
+for (var i = 0; i < number_cowbells; i++) {
+				var px = cowbells[i].position.x + (cowbells[i].Speed * 4);
+				px = (px < -1000) ? 1000 : (px > 1000) ? -1000 : px;
+				cowbells[i].position.x = px;
+}
+ 
+var vh = hammer.position.z - 30;
+if (vh < -100) {
+	hammer.visible = false;
+} else {
+	hammer.position.z = vh;
+}
+
+				renderer.render( scene, camera );
+
+			}
+
+</script>
+<style type="text/css">
+body {
+	background-color:#555;
+	margin:0; padding:0;
+}
+
+#gameDialog {
+	cursor: pointer; width: 30%;
+	font:bold 16pt sans-serif;
+	border:2px solid #c11;
+	background: #e33; color: #fff;
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	margin-left: -6em;
+	padding: 1em;
+	zIndex: 10001;
+}
+#gameScore {
+	position:absolute;
+	bottom:2em; right:45%; 
+	font:16pt sans-serif;
+	border:2px solid #c11;
+	background: #e33; color: #fff;	
+	cursor:pointer;
+}
+#twitter-share {
+	position:absolute;
+	top:10px; right:100px;
+}
+</style>
+<div id="twitter-share">
+<a href="http://twitter.com/share" class="twitter-share-button" data-text="Dynamite! Bruce hears more cowbell, everyone wins" data-count="horizontal" data-via="loleg" data-rela</div>ted="hackerdojo">Tweet</a>
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+</div>
+</body>
+</html>

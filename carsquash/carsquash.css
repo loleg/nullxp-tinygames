@@ -1,0 +1,6 @@
+canvas { border:1px solid #aaa; cursor:pointer; cursor:hand;
+ background:url(http://feedfern.utou.ch/img/road.png) no-repeat; }
+small { font:bold italic 10pt lucida,sans-serif; color:#888; }
+h1 { font:bold 1.4em monospace; text-decoration:underline; }
+h2 { font-style:italic; padding-bottom:.3em; }
+p { font:9pt lucida,sans-serif; color:#333; text-align:left; }
