@@ -4,7 +4,7 @@
  http://creativecommons.org/licenses/by/3.0/
  
 */
-var LEVEL_LAST = 4; // total levels
+var LEVEL_LAST = 5; // total levels
 function Game(ctx) {
     
     this.pause = true;
@@ -184,6 +184,7 @@ function Game(ctx) {
 	this.posV = v;
 	this.s = 30;
 	this.capture = 14;
+	this.bonus = false;
     
 	// set up opposing exits
 	this.x =
@@ -195,6 +196,9 @@ function Game(ctx) {
 		((this.posV) ? 6 : ctx.canvas.height)
 		: centerY;
 	
+	// set bonus post
+	this.bonus = (this.posH && this.posV);
+	
 	this.draw = function() {
 	    ctx.save();
 	    //ctx.globalAlpha = 0.5 + Math.random()*0.4;
@@ -203,6 +207,14 @@ function Game(ctx) {
 	    ctx.beginPath();
 	    ctx.arc(0, 0, this.s, 0, 6.2832, true);
 	    ctx.fill();
+	    if (this.bonus) {
+		ctx.save();
+		ctx.rotate(-1.57);
+		Context2d.fillStyle = "#dc0";
+		Context2d.font = "bold 10pt sans-serif";
+		Context2d.fillText("BONUS", -22, 10);
+		ctx.restore();
+	    }
 	    ctx.restore();
 	};
 	
@@ -214,6 +226,8 @@ function Game(ctx) {
 	    if (dx < this.capture && dy < this.capture) {
 		// bee has escaped
 		b.active = false;
+		// check bonus
+		if (this.bonus) game.score += 50;
 		return true;
 	    }
 	    return false;
@@ -352,7 +366,7 @@ function Game(ctx) {
 	
 	// show player
 	if (mouseDown(0)) { this.play.update(); }
-	drawMessage(this.score, "yellow", 200);
+	drawMessage(this.score, "yellow", 207, null, true);
 	this.drawCounter(this.total - this.bees.length);
 	
 	// check status
@@ -362,7 +376,7 @@ function Game(ctx) {
 	}
 	
 	// draw timer	
-	drawMessage(elapsed, (elapsed < 10) ? "red" : null, -230);
+	drawMessage(elapsed, (elapsed < 10) ? "red" : null, -244, null, true);
 	if (elapsed < 1) { this.level = -1; this.pause = true; }
 
     };
@@ -386,7 +400,7 @@ function Game(ctx) {
 	    drawMessage("G A M E  O V E R", "red", 130);
 	    drawMessage(this.score, "yellow", 200);
 	    drawMessage("right click to try again",
-		"rgb(" + t + "," + t + "," + t + ")", 170, 18);
+		"rgb(" + t + "," + t + "," + t + ")", -200, 20);
 	    
 	    if (mouseDown(2)) this.Restart();
 	    return;
@@ -395,8 +409,10 @@ function Game(ctx) {
 	    
 	    // welcome message
 	    drawMessage("tap or click to start",
-		"rgb(" + t + "," + t + "," + t + ")", 130);
-	    drawMessage("help the bees escape with sugar!", "#ccc", 170, 13);
+		"rgb(" + t + "," + t + "," + t + ")", -200);
+	    drawMessage("help the bees escape! they'll go for sugar", "#ccc", 122, 13);
+	    drawMessage("the faster you are, the more points you get", "#ccc", 142, 13);
+	    drawMessage("race the clock through five challenging levels", "#ccc", 162, 13);
 	    drawMessage("a #LD21 game jam entry", "#dfd", 200, 16);
 		
 	    if (mouseDown(0)) this.Restart();
@@ -406,8 +422,8 @@ function Game(ctx) {
 	    
 	    // game completed
 	    drawMessage("right click to play again",
-		"rgb(" + t + "," + t + "," + t + ")", 170, 13);
-	    drawMessage("thanks! you saved uzzz, hero :)", "#cfc", 130);
+		"rgb(" + t + "," + t + "," + t + ")", 175, 13);
+	    drawMessage("you saved uzzz, thanks!", "#cf0", 135);
 	    drawMessage(this.score, "yellow", 200);
 	    
 	    if (mouseDown(2)) this.Restart();
@@ -428,10 +444,12 @@ function Game(ctx) {
     };
     
     this.Restart = function() {
-	
+
+	// for testing, set the starting level here
+	this.level = 0;	
+	// reset for a new game
 	this.pause = false;
 	this.score = 0;
-	this.level = 0;
 	this.Start();
 	
     };
@@ -453,28 +471,35 @@ function Game(ctx) {
 	    break;
 	    
 	case 1:
+	    this.createBlock(1.5, 0, 0);
+	    this.createExits(3);
+	    this.createBees(4);
+	    this.play = new this.Player();
+	    break;
+		    
+	case 2:
 	    this.createBlock(1, -.2, 1);
 	    this.createBlock(1, .2, 1);
+	    this.createExits(2);
+	    this.createBees(4);
+	    this.play = new this.Player();
+	    break;
+	    
+	case 3:
+	    this.createBlock(0.7, -.3, 0);
+	    this.createBlock(0.7, .3, 0);
+	    this.createBlock(0.7, -.3, 1);
+	    this.createBlock(0.7, .3, 1);
 	    this.createExits(2);
 	    this.createBees(5);
 	    this.play = new this.Player();
 	    break;
 	    
-	case 2:
-	    this.createBlock(0.7, -.3, 0);
-	    this.createBlock(0.7, .3, 0);
-	    this.createBlock(0.7, -.3, 1);
-	    this.createBlock(0.7, .3, 1);
-	    this.createExits(4);
-	    this.createBees(7);
-	    this.play = new this.Player();
-	    break;
-	    
-	case 3:
+	case 4:
 	    this.createBlock(1, -.2, 0);
 	    this.createBlock(1, .2, 0);
-	    this.createExits(2);
-	    this.createBees(7);
+	    this.createExits(1);
+	    this.createBees(5);
 	    this.play = new this.Player();
 	    break;
 	    

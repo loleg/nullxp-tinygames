@@ -63,7 +63,7 @@ function main() {
     game.Frame();
 }
 
-function drawMessage(message, color, pos, size) {
+function drawMessage(message, color, pos, size, noshade) {
     // draw a message
     color = (!color) ? "#fff" : color;
     pos   = (!pos)   ? 0 : pos;
@@ -73,10 +73,12 @@ function drawMessage(message, color, pos, size) {
     Context2d.textBaseline = "top";
     Context2d.textAlign = "center";
     Context2d.fillStyle = color;
-    Context2d.shadowColor = "#333";
-    Context2d.shadowOffsetX = 3;
-    Context2d.shadowOffsetY = 3;
-    Context2d.shadowBlur = 5;
+    if (!noshade) {
+		Context2d.shadowColor = "#333";
+		Context2d.shadowOffsetX = 3;
+		Context2d.shadowOffsetY = 3;
+		Context2d.shadowBlur = 5;
+	}
     Context2d.fillText(message, centerX, centerY + pos);
     Context2d.restore();
 }
