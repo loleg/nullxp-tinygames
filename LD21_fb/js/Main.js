@@ -3,7 +3,7 @@
  *
  */
 
-const FPS = 30;
+var FPS = 30;
 
 var canvas = null;
 var Context2d = null;

@@ -4,7 +4,7 @@
  http://creativecommons.org/licenses/by/3.0/
  
 */
-const levelLAST = 4; // total levels
+var LEVEL_LAST = 4; // total levels
 function Game(ctx) {
     
     this.pause = true;
@@ -13,7 +13,7 @@ function Game(ctx) {
     this.timer = 0;
     this.total = 0;
     
-    this.play;
+    this.play = null;
     this.bees = new Array();
     this.exits = new Array();
     this.blocks = new Array();
@@ -374,7 +374,7 @@ function Game(ctx) {
 	var t = 200 + Math.abs(this.timer - 25) * 2;
 	
 	// title image
-	if (this.level == levelLAST) {
+	if (this.level == LEVEL_LAST) {
 	    drawCenterImage("img/5618177568_997688dbaa_b.jpg");
 	}
         drawCenterImage("img/freebee.png");
@@ -402,7 +402,7 @@ function Game(ctx) {
 	    if (mouseDown(0)) this.Restart();
 	    return;
 	    
-	case levelLAST:
+	case LEVEL_LAST:
 	    
 	    // game completed
 	    drawMessage("right click to play again",
