@@ -93,3 +93,8 @@ function drawCenterImage(imgsrc) {
         centerY - (img.height / 2));
     Context2d.restore();
 }
+
+function preLoadImage(imgsrc) {
+    var img = new Image();
+    img.src = imgsrc;
+}

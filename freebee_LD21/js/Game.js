@@ -388,8 +388,9 @@ function Game(ctx) {
 	var t = 200 + Math.abs(this.timer - 25) * 2;
 	
 	// title image
+	preLoadImage("img/P1020726.JPG");
 	if (this.level == LEVEL_LAST) {
-	    drawCenterImage("img/5618177568_997688dbaa_b.jpg");
+	    drawCenterImage("img/P1020726.JPG");
 	}
         drawCenterImage("img/freebee.png");
 	
@@ -422,7 +423,7 @@ function Game(ctx) {
 	    
 	    // game completed
 	    drawMessage("right click to play again",
-		"rgb(" + t + "," + t + "," + t + ")", 175, 13);
+		"rgb(" + t + "," + t + "," + t + ")", -170, 16);
 	    drawMessage("you saved uzzz, thanks!", "#cf0", 135);
 	    drawMessage(this.score, "yellow", 200);
 	    
