@@ -1,3 +1,4 @@
+// Made with Inkscape and Professor Cloud's amazing SVG converter - http://www.professorcloud.com/svg-to-canvas/
 var drawSugar = function(ctx) {
 ctx.save();
 ctx.beginPath();

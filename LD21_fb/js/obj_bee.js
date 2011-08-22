@@ -1,3 +1,4 @@
+// Made with Inkscape and Professor Cloud's amazing SVG converter - http://www.professorcloud.com/svg-to-canvas/
 var drawBee = function(ctx, meWorry) {
 ctx.save();
 ctx.translate(-285,-325); // center

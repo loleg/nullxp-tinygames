@@ -188,11 +188,11 @@ function Game(ctx) {
 	// set up opposing exits
 	this.x =
 	    (this.posH) ?
-		((this.posV) ? 0 : ctx.canvas.width)
+		((this.posV) ? 6 : ctx.canvas.width)
 		: centerX;
 	this.y =
 	    (!this.posH) ?
-		((this.posV) ? 0 : ctx.canvas.height)
+		((this.posV) ? 6 : ctx.canvas.height)
 		: centerY;
 	
 	this.draw = function() {
@@ -443,6 +443,7 @@ function Game(ctx) {
 	
 	// reset score and objects
 	this.blocks = new Array();
+	this.bees = new Array();
 	
 	switch (this.level) {
 	case 0:
@@ -455,7 +456,7 @@ function Game(ctx) {
 	    this.createBlock(1, -.2, 1);
 	    this.createBlock(1, .2, 1);
 	    this.createExits(2);
-	    this.createBees(4);
+	    this.createBees(5);
 	    this.play = new this.Player();
 	    break;
 	    
@@ -465,7 +466,7 @@ function Game(ctx) {
 	    this.createBlock(0.7, -.3, 1);
 	    this.createBlock(0.7, .3, 1);
 	    this.createExits(4);
-	    this.createBees(5);
+	    this.createBees(7);
 	    this.play = new this.Player();
 	    break;
 	    
@@ -473,7 +474,7 @@ function Game(ctx) {
 	    this.createBlock(1, -.2, 0);
 	    this.createBlock(1, .2, 0);
 	    this.createExits(2);
-	    this.createBees(6);
+	    this.createBees(7);
 	    this.play = new this.Player();
 	    break;
 	    
