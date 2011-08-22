@@ -410,10 +410,10 @@ function Game(ctx) {
 	    // welcome message
 	    drawMessage("tap or click to start",
 		"rgb(" + t + "," + t + "," + t + ")", -200);
-	    drawMessage("help the bees escape! they'll go for sugar", "#ccc", 122, 13);
-	    drawMessage("the faster you are, the more points you get", "#ccc", 142, 13);
-	    drawMessage("race the clock through five challenging levels", "#ccc", 162, 13);
-	    drawMessage("a #LD21 game jam entry", "#dfd", 200, 16);
+	    drawMessage("Help the bees escape using your sugar cube!", "#ccc", 122, 13);
+	    drawMessage("The faster you are, the more points you get", "#ccc", 142, 13);
+	    drawMessage("Race against time through five bizzy levels", "#ccc", 162, 13);
+	    drawMessage("Created for Ludum Dare 21 - 'Escape'", "#dfd", 200, 16);
 		
 	    if (mouseDown(0)) this.Restart();
 	    return;
