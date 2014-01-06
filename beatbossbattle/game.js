@@ -282,15 +282,15 @@ function checkCollide(i) {
 
 function loadGameData() {
 	// create players
-	var p1 = new Player("Jo", "pix/jo.png");
+	var p1 = new Player("Sheena", "pix/jo.png");
 	p1.X = 170; p1.Y = 140;
 	players.push(p1);
-	var p2 = new Player("Ernie", "pix/ernie.png");
+	var p2 = new Player("Heffer", "pix/ernie.png");
 	p2.X = 270; p2.Y = 140;
 	players.push(p2);
 
 	// create first boss
-	boss = new Boss("Jay-Z 1st date", "pix/jay-z.png");
+	boss = new Boss("Jay-Z on 1st base", "pix/jay-z.png");
 	boss.X = 200; boss.Y = 10;
 
 	// load bonus items
@@ -360,11 +360,11 @@ function checkScore(i) {
        	switch (level) {
        	case 2:
        		message = "great start " + message + "!";
-       		boss = new Boss("Kweli romance", "pix/talib.png");
+       		boss = new Boss("Kweli 2nd base", "pix/talib.png");
        		break;
        	case 3:
        		message = "big score " + message + "!";
-       		boss = new Boss("Kanye love", "pix/kanye.png");
+       		boss = new Boss("Kanye 3rd base", "pix/kanye.png");
        		break;
        	case 4:
        		message = message + " wins the round!";
